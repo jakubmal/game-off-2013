@@ -33,6 +33,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/game', game.show);
+app.get('/get_map', game.getMap);
+app.get('/games', game.index);
 
 var server = http.createServer(app);
 var io = require('socket.io').listen(server);

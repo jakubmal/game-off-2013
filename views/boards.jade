@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 boards
+
+  form(method='get' action='/game')
+    input(type='text' name='key')
+    input(type='submit' value='Create game')
+
+  ul
+    - for (var i = 0; i < boards.length; i++)
+      li
+        span= boards[i].key
+        span= boards[i].players.length + '/' + limit
+
+        - url = '/game?key=' + boards[i].key
+        a(href=url) Join

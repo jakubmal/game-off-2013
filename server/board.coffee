@@ -1,19 +1,36 @@
 _ = require 'underscore'
+Map = require './map'
+
+PLAYERS_LIMIT = 2
 
 class Board
-  constructor: () ->
+  @PLAYERS_LIMIT: PLAYERS_LIMIT
+  constructor: (@key) ->
     @players = []
+    @map = new Map
 
     # who can currently make move
     @currentPlayer = null
 
+    @onDead = (->)
+
   addPlayer: (player) ->
+    if @players.length >= PLAYERS_LIMIT
+      player.reject()
+      return
+
     @players.push player
     player.onDisconnect = () => @removePlayer(player)
     player.onEndTurn = () => @endTurn(player)
 
   removePlayer: (player) ->
+    console.log 'removePlayer'
+
     @players = _.without @players, player
+    @playerLost player
+
+    console.log "players length: #{@players.length}"
+    @die() if @players.length == 0
 
   startIfFull: () ->
     console.log @players.length
@@ -38,5 +55,18 @@ class Board
   endTurn: (player) ->
     return unless @currentPlayer == player
     @goToNextPlayer()
+
+  playerLost: (player) ->
+    player.lost()
+    otherPlayers = _.without @players, player
+    if otherPlayers.length == 1
+      otherPlayers[0].won()
+      @die()
+
+  die: ->
+    player.reject() for player in @players
+
+    console.log 'ondead'
+    @onDead()
 
 module.exports = Board
