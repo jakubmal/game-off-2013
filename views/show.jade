@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= key
+  p Welcome to #{key}
+
+  a.fn-end-turn(href="#") End turn
+
+  script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+  script(src='/socket.io/socket.io.js')
+  script(type='text/javascript').
+    window.key = '#{key}';
+
+  script(src='/player.js')
+  script(src='/game.js')
