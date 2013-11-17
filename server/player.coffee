@@ -1,32 +1,41 @@
+idCounter = 0
+sockets = []
+
 class Player
-  constructor: (@socket, color) ->
+  constructor: (socket, @color) ->
+    @id = idCounter++
+    sockets[@id] = socket
+
     @onMakeMove = (->)
     @onEndTurn = (->)
 
-    @socket.emit 'color', {color}
+    sockets[@id].emit 'color', {@color}
 
   gameStarted: (fields) ->
-    @socket.emit 'gameStarted', {fields}
-    @socket.on 'makeMove', ({source, dest}) => @onMakeMove(source, dest)
-    @socket.on 'endTurn', () => @onEndTurn()
-    @socket.on 'disconnect', () => @onDisconnect()
+    sockets[@id].emit 'gameStarted', {fields}
+    sockets[@id].on 'makeMove', ({source, dest}) => @onMakeMove(source, dest)
+    sockets[@id].on 'endTurn', () => @onEndTurn()
+    sockets[@id].on 'disconnect', () => @onDisconnect()
 
   setCurrent: () ->
-    @socket.emit 'setCurrent'
+    sockets[@id].emit 'setCurrent'
 
   unsetCurrent: () ->
-    @socket.emit 'unsetCurrent'
+    sockets[@id].emit 'unsetCurrent'
 
   mapChange: (fields) ->
-    @socket.emit 'mapChange', {fields}
+    sockets[@id].emit 'mapChange', {fields}
 
   reject: () ->
-    @socket.emit 'rejected'
+    sockets[@id].emit 'rejected'
 
   lost: () ->
-    @socket.emit 'lost'
+    sockets[@id].emit 'lost'
 
   won: () ->
-    @socket.emit 'won'
+    sockets[@id].emit 'won'
+
+  serialize: () ->
+    _.omit @, 'socket'
 
 module.exports = Player

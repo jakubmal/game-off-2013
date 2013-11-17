@@ -18,7 +18,6 @@ class Board
 
   genPlayer: (socket) ->
     if @players.length >= PLAYERS_LIMIT
-      player.reject()
       return
 
     player = new Player socket, @colors.shift()
@@ -42,6 +41,11 @@ class Board
     @start() if 2 == @players.length
 
   start: () ->
+    @map.initCapitals @players
+    @startTurn()
+
+  startTurn: () ->
+    @map.genArmies()
     player.gameStarted(@map.fields) for player in @players
     @setCurrentPlayer(@players[0])
 

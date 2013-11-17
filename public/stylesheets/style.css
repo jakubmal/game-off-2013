@@ -105,7 +105,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 .hexagon.capital.army:after {
-  content: "\f024" " 95/14";
+  content: "\f024" " " attr(data-army);
 }
 .hexagon.player-red:after {
   background-color: #bb515e;

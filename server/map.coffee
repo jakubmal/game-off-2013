@@ -3,7 +3,6 @@ _ = require 'underscore'
 class Map
   constructor: () ->
     @initFields()
-    @initCapitals()
 
   initFields: () ->
     @fields = [1..19].map (i) =>
@@ -12,32 +11,37 @@ class Map
       else
         [1..11].map () => @initField()
 
-  initCapitals: () ->
+  initCapitals: (players) ->
+
+    playerRed = _.findWhere players, color: 'red'
     @fields[2][0].isCapital = true
-    @fields[2][0].player = color: 'red'
+    @fields[2][0].player = playerRed
+    @assignNeighboursTo {x: 2, y: 0}, playerRed
 
-    @fields[16][0].isCapital = true
-    @fields[16][0].player = color: 'blue'
+    # @fields[16][0].isCapital = true
+    # @fields[16][0].player = color: 'blue'
 
+    playerGreen = _.findWhere players, color: 'green'
     @fields[16][9].isCapital = true
-    @fields[16][9].player = color: 'green'
+    @fields[16][9].player = playerGreen
+    @assignNeighboursTo {x: 16, y: 9}, playerGreen
 
-    @fields[2][9].isCapital = true
-    @fields[2][9].player = color: 'purple'
+    # @fields[2][9].isCapital = true
+    # @fields[2][9].player = color: 'purple'
 
 
   initField: () ->
     type: if Math.random() > 0.5 then 'land' else 'water'
     isCity: if Math.random() > 0.9 then true else false
     isCapital: false
-    owner: null
+    player: null
     army: 0
 
   getNeighbours: ({x, y}) ->
     results = []
 
-    results.push point if @isInMap(point = { x: x, y: y - 1 })
-    results.push point if @isInMap(point = { x: x, y: y + 1 })
+    results.push point if @isInMap(point = { x: x - 2, y: y })
+    results.push point if @isInMap(point = { x: x + 2, y: y })
 
     results.push point if @isInMap(point = { x: x - 1, y: y })
     results.push point if @isInMap(point = { x: x + 1, y: y })
@@ -59,6 +63,41 @@ class Map
 
     allNeighbours = _.uniq(allNeighbours, false, ({x, y}) -> x + 1000 * y)
     _.without(allNeighbours, _.findWhere(allNeighbours, point))
+
+  assignNeighboursTo: (point, player) ->
+    nghs = @getNeighbours point
+    nghs = nghs.filter ({x, y}) =>
+      field = @fields[x][y]
+      return false if field.type == 'water'
+      return false if field.army
+      return false if field.isCity
+      return false if field.isCapital
+      true
+
+    nghs.forEach ({x, y}) =>
+      field = @fields[x][y]
+      field.player = player
+
+  getAllFields: () -> _.flatten @fields
+
+  genArmies: () ->
+    fields = @getAllFields()
+    fields = fields.filter (f) -> f.player?
+    fieldsByPlayer = _.groupBy fields, (f) -> f.player.color
+
+    _.pairs(fieldsByPlayer).forEach ([color, fields]) ->
+      console.log color, fields
+
+      fieldsCount = fields.length
+      cities = fields.filter (f) -> f.isCity || f.isCapital
+
+      armyPerCity = parseInt fields.length / cities.length
+      console.log cities
+      cities.forEach (c) ->
+
+        c.army += 5 unless c.isCapital
+        c.army += 15 if c.isCapital
+        c.army += armyPerCity
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
 
