@@ -13,7 +13,7 @@ class Player
 
   gameStarted: (fields) ->
     sockets[@id].emit 'gameStarted', {fields}
-    sockets[@id].on 'makeMove', ({source, dest}) => @onMakeMove(source, dest)
+    sockets[@id].on 'makeMove', (data) => console.log(data); @onMakeMove(data)
     sockets[@id].on 'endTurn', () => @onEndTurn()
     sockets[@id].on 'disconnect', () => @onDisconnect()
 

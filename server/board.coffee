@@ -25,6 +25,7 @@ class Board
     @players.push player
     player.mapChange @map.fields
     player.onDisconnect = () => @removePlayer(player)
+    player.onMakeMove = (data) => @playerMakeMove(player, data)
     player.onEndTurn = () => @endTurn(player)
 
   removePlayer: (player) ->
@@ -58,8 +59,9 @@ class Board
     @players.push(@players.shift())
     @setCurrentPlayer(@players[0])
 
-  playerMakeMove: (player) ->
-    return unless @currentPlayer == player
+  playerMakeMove: (player, {source, dest}) ->
+    @map.makeMove source, dest
+    @mapChange()
 
   endTurn: (player) ->
     return unless @currentPlayer == player

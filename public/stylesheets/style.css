@@ -70,7 +70,8 @@
 .hexagon:hover {
   opacity: 0.3;
 }
-.hexagon.highlight {
+.hexagon.highlight,
+.hexagon.targetable {
   opacity: 0.6;
 }
 .hexagon.water:before {

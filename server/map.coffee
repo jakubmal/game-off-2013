@@ -101,4 +101,13 @@ class Map
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
 
+  makeMove: (source, dest) ->
+    sourceField = @fields[source.x][source.y]
+    destField = @fields[dest.x][dest.y]
+
+    destField.army += sourceField.army
+    sourceField.army = 0
+    destField.player = sourceField.player
+    @assignNeighboursTo dest, sourceField.player
+
 module.exports = Map
