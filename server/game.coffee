@@ -11,7 +11,8 @@ exports.index = (req, res) ->
 
 exports.getMap = (req, res) ->
   board = _.findWhere boards, key: req.query.key
-  res.send fields: board.map.fields
+  # res.send fields: board.map.fields
+  res.send fields: board.map.getNeighbours({x: 2, y: 0})
 
 exports.playerSocketHandler = (socket) ->
   socket.emit 'welcome'
