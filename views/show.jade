@@ -27,8 +27,8 @@ block content
               .hexagon.capital.player-blue
             - else if (i == 9 && j == 8)
               .hexagon.capital.player-green
-            - else if (Math.random() > 1)
-              .hexagon.army.player-red
+            - else if (Math.random() > 0)
+              .hexagon.army.player-red(data-army = "43")
             - else if (Math.random() > 1)
               .hexagon.army.player-green
             - else if (Math.random() > 1)
