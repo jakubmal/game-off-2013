@@ -12,4 +12,10 @@ class Player
   setCurrent: () ->
     @socket.emit 'setCurrent'
 
+  unsetCurrent: () ->
+    @socket.emit 'unsetCurrent'
+
+  reject: () ->
+    @socket.emit 'rejected'
+
 module.exports = Player
