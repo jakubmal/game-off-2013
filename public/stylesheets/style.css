@@ -64,8 +64,14 @@
   font: 2em/1.2 monospace;
   text-transform: uppercase;
 }
+.hexagon {
+  cursor: pointer;
+}
 .hexagon:hover {
-  opacity: 0.5;
+  opacity: 0.3;
+}
+.hexagon.highlight {
+  opacity: 0.6;
 }
 .hexagon.water:before {
   background-color: rgba(30, 144, 255, 0.56);
