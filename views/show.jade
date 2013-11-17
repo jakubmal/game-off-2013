@@ -1,8 +1,85 @@
 extends layout
 
 block content
-  h1= key
-  p Welcome to #{key}
+  #container
+    //- .header
+    //-   header
+    //-     h3 HexEmpire
+    //-   nav
+    //-     ul
+    //-       li a
+    //-       li b
+    //-       li c
+
+    //-   div(style="clear: both;")
+
+    .map
+
+      - for (var j = 0; j < 10; ++j)
+
+        .row
+          - for (var i = 0; i < 10; ++i)
+            - if (i == 0 && j == 1)
+              .hexagon.capital.ribbon.content.capital-red
+            - else if (i == 9 && j == 1)
+              .hexagon.capital.ribbon.content.capital-purple
+            - else if (i == 0 && j == 8)
+              .hexagon.capital.ribbon.content.capital-blue
+            - else if (i == 9 && j == 8)
+              .hexagon.capital.ribbon.content.capital-green
+            - else if (Math.random() > 0.98)
+              .hexagon.army.army-red.ribbon.content
+            - else if (Math.random() > 0.98)
+              .hexagon.army.army-green.ribbon.content
+            - else if (Math.random() > 0.98)
+              .hexagon.army.army-blue.ribbon.content
+            - else if (Math.random() > 0.98)
+              .hexagon.army.army-purple.ribbon.content
+            - else if (Math.random() > 0.8)
+              .hexagon.ribbon.city.content.army-red.ribbon.content
+            - else if (Math.random() > 0.8)
+              .hexagon.ribbon.city.content.army.army-red.content
+            - else if (Math.random() > 0.3)
+              .hexagon.ribbon.city.content
+            - else
+              .hexagon
+              //- .hexagon(class = Math.random() > 0.3 ? "land army army-red" : "")
+
+        - if (j != 9)
+
+          .row
+            - for (var i = 0; i < 11; ++i)
+              - if (Math.random() > 0.98)
+                .hexagon.army.army-red.ribbon.content(data-content="95/64")
+              - else if (Math.random() > 0.98)
+                .hexagon.army.army-green.ribbon.content(data-content="95/64")
+              - else if (Math.random() > 0.98)
+                .hexagon.army.army-blue.ribbon.content(data-content="95/64")
+              - else if (Math.random() > 0.98)
+                .hexagon.army.army-purple.ribbon.content(data-content="95/64")
+              - else if (Math.random() > 0.3)
+                .hexagon.land
+              - else
+                .hexagon
+
+    //- .row
+    //-   - for (var i = 0; i < 10; ++i)
+    //-     .hexagon
+
+    //- .row
+    //-   - for (var i = 0; i < 11; ++i)
+    //-     .hexagon
+
+    //- .row
+    //-   .hexagon.content.ribbon(data-content='This is a test!!!')
+    //-   .hexagon.content.longtext(data-content='Some longer text here.')
+
+    //- .row
+    //-   .hexagon
+
+    //- .row
+    //-   .hexagon.content.ribbon(data-content='This is a test!!!')
+    //-   .hexagon.content.longtext(data-content='Some longer text here.')
 
   a.fn-end-turn(href="#") End turn
 

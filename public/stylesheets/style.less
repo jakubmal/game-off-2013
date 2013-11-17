@@ -1,8 +1,61 @@
+@color-red: #bb515e;
+@color-green: #99c158;
+@color-green-dark: #223d15;
+@color-blue: #5ec7ba;
+@color-blue-dark: #2d3080;
+@color-purple: #853cb2;
+@color-purple2: #8c65cd;
+
+@color-grey: #444;
+@color-grey-light: #666;
+@color-black: #222;
+
+@color-bg: #fff;
+
+@import "map.less";
+@import "font-awesome.css";
+
+html {
+  height: 100%;
+}
+
 body {
-  padding: 50px;
+  // padding: 50px;
+  height: 100%;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#container {
+  height: 100%;
+
+  border: 34px solid @color-black;
+  background-color: @color-bg;
+
+  .header {
+    border: 1px solid blue;
+    width: 650px;
+    margin: 0 auto;
+
+    header {
+      border: 1px solid red;
+      width: 250px;
+
+      float: left;
+    }
+
+    ul {
+      list-style-type: none;
+      float: left;
+
+      li {
+        width: 100px;
+        border: 1px solid blue;
+        float: left;
+      }
+    }
+  }
 }
