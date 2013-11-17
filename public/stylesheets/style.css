@@ -84,7 +84,7 @@
   border: 15px solid #222222;
 }
 .hexagon.army:after {
-  content: "\f183" " 95/14";
+  content: "\f183" " " attr(data-army);
 }
 .hexagon.city:before {
   background-color: #99c158;
