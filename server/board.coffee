@@ -10,6 +10,8 @@ class Board
     # who can currently make move
     @currentPlayer = null
 
+    @onDead = (->)
+
   addPlayer: (player) ->
     if @players.length >= PLAYERS_LIMIT
       player.reject()
@@ -20,10 +22,13 @@ class Board
     player.onEndTurn = () => @endTurn(player)
 
   removePlayer: (player) ->
+    console.log 'removePlayer'
+
     @players = _.without @players, player
     @playerLost player
 
-    @reset() if @players.length == 0
+    console.log "players length: #{@players.length}"
+    @die() if @players.length == 0
 
   startIfFull: () ->
     console.log @players.length
@@ -54,9 +59,12 @@ class Board
     otherPlayers = _.without @players, player
     if otherPlayers.length == 1
       otherPlayers[0].won()
+      @die()
 
-    @reset()
+  die: ->
+    player.reject() for player in @players
 
-  reset: ->
+    console.log 'ondead'
+    @onDead()
 
 module.exports = Board
