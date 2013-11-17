@@ -95,7 +95,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 .hexagon.city.army:after {
-  content: "\f192  1/23";
+  content: "\f192" attr(data-army);
 }
 .hexagon.capital:before {
   border-radius: 100px;

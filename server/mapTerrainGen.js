@@ -148,7 +148,7 @@ function generateTerrainMap(mapDimension, unitSize, roughness) {
  function landVsWater(map){
 	for (var i = map.length - 1; i >= 0; i--) {
 		for (var j = map.length - 1; j >= 0; j--) {
-			if(map[i][j] >  0.6){ 
+			if(map[i][j] > 0.95){
 				map[i][j] = 1;
 			}
 			else{

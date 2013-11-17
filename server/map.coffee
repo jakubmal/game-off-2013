@@ -1,9 +1,9 @@
 _ = require 'underscore'
-MapGen = require('./mapGen')
+# MapGen = require('./mapGen')
 class Map
   constructor: () ->
-    @mapGen = new MapGen()
-    @mapGen.generate(19,11)
+    # @mapGen = new MapGen()
+    # @mapGen.generate(19,11)
     @initFields()
 
   initFields: () ->
@@ -17,6 +17,7 @@ class Map
 
     playerRed = _.findWhere players, color: 'red'
     @fields[2][0].isCapital = true
+    @fields[2][0].type = "land"
     @fields[2][0].player = playerRed
     @assignNeighboursTo {x: 2, y: 0}, playerRed
 
@@ -25,6 +26,7 @@ class Map
 
     playerGreen = _.findWhere players, color: 'green'
     @fields[16][9].isCapital = true
+    @fields[16][9].type = "land"
     @fields[16][9].player = playerGreen
     @assignNeighboursTo {x: 16, y: 9}, playerGreen
 
@@ -33,8 +35,10 @@ class Map
 
 
   initField: (i,e) ->
-    type: @mapGen.getLand(i-1,e-1)
-    isCity: @mapGen.getCity(i-1,e-1)
+    isCity = Math.random() > 0.9
+
+    isCity: isCity
+    type: if isCity || Math.random() > 0.1 then "land" else "water"
     isCapital: false
     player: null
     army: 0
@@ -107,9 +111,24 @@ class Map
     sourceField = @fields[source.x][source.y]
     destField = @fields[dest.x][dest.y]
 
-    destField.army += sourceField.army
-    sourceField.army = 0
-    destField.player = sourceField.player
-    @assignNeighboursTo dest, sourceField.player
+    console.log sourceField, destField
+
+    if sourceField.player != destField.player
+
+      if sourceField.army > destField.army
+        destField.army = sourceField.army - destField.army
+        sourceField.army = 0
+        destField.player = sourceField.player
+        @assignNeighboursTo dest, sourceField.player
+      else
+        destField.army -= sourceField.army
+        sourceField.army = 0
+
+    else
+
+      destField.army += sourceField.army
+      sourceField.army = 0
+      destField.player = sourceField.player
+      @assignNeighboursTo dest, sourceField.player
 
 module.exports = Map

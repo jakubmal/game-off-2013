@@ -68,6 +68,7 @@ class Board
     @startTurn() if @turnCount == @playersCount
 
   playerMakeMove: (player, {source, dest}) ->
+    # return unless @currentPlayer == player
     @map.makeMove source, dest
     @mapChange()
 

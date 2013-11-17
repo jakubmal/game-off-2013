@@ -1,7 +1,8 @@
 class Map
   constructor: (@$element) ->
     that = @
-    @$element.on 'click', '.hexagon.army:not(.moved)', (e) => @armyClicked e
+    console.log ".hexagon.army:not(.moved):not(.targetable).player-#{window.player.color}"
+    @$element.on 'click', ".hexagon.army:not(.moved):not(.targetable)", (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
     $(document).on 'click', '.end-turn', @onEndTurn
 
@@ -43,6 +44,11 @@ class Map
 
   armyClicked: (e) ->
     @$source = $ e.target
+
+
+    console.log ".player-#{window.player.color}"
+    return unless @$source.hasClass("player-#{window.player.color}")
+
     @sourcePoint =
       x: parseInt @$source.attr('data-x')
       y: parseInt @$source.attr('data-y')

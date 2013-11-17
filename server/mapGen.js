@@ -58,7 +58,7 @@ mapGen.prototype.addCities = function(sizeX,sizeY){
     // 1 sq
     while( citiesSet < cityCount ){
         posX = Math.floor(Math.random()*sqSizeX);
-        posY = Math.floor(Math.random()*sqSizeY);  
+        posY = Math.floor(Math.random()*sqSizeY);
         if(this.map[posX][posY].isCity == false && this.map[posX][posY].type == 'land' ){
             this.map[posX][posY].isCity = true;
             citiesSet++;
@@ -68,7 +68,7 @@ mapGen.prototype.addCities = function(sizeX,sizeY){
     citiesSet = 0;
     while( citiesSet < cityCount ){
         posX = Math.floor(Math.random()*sqSizeX)+sqSizeX;
-        posY = Math.floor(Math.random()*sqSizeY);   
+        posY = Math.floor(Math.random()*sqSizeY);
         if(this.map[posX][posY].isCity == false && this.map[posX][posY].type == 'land'){
             this.map[posX][posY].isCity = true;
             citiesSet++;
@@ -78,7 +78,7 @@ mapGen.prototype.addCities = function(sizeX,sizeY){
      citiesSet = 0;
     while( citiesSet < cityCount ){
         posX = Math.floor(Math.random()*sqSizeX);
-        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;   
+        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;
         if(this.map[posX][posY].isCity == false  && this.map[posX][posY].type == 'land'){
             this.map[posX][posY].isCity = true;
             citiesSet++;
@@ -88,7 +88,7 @@ mapGen.prototype.addCities = function(sizeX,sizeY){
      citiesSet = 0;
     while( citiesSet < cityCount ){
         posX = Math.floor(Math.random()*sqSizeX)+sqSizeX;
-        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;   
+        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;
         if(this.map[posX][posY].isCity == false  && this.map[posX][posY].type == 'land'){
             this.map[posX][posY].isCity = true;
             citiesSet++;
