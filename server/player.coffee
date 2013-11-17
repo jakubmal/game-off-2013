@@ -3,17 +3,20 @@ class Player
     @onMakeMove = (->)
     @onEndTurn = (->)
 
-  gameStarted: () ->
-    @socket.emit 'gameStarted'
+  gameStarted: (fields) ->
+    @socket.emit 'gameStarted', {fields}
     @socket.on 'makeMove', ({source, dest}) => @onMakeMove(source, dest)
     @socket.on 'endTurn', () => @onEndTurn()
-    @socket.on 'disconnect', () => console.log('KUUUUURWA'); @onDisconnect()
+    @socket.on 'disconnect', () => @onDisconnect()
 
   setCurrent: () ->
     @socket.emit 'setCurrent'
 
   unsetCurrent: () ->
     @socket.emit 'unsetCurrent'
+
+  mapChange: (fields) ->
+    @socket.emi 'mapChange', {fields}
 
   reject: () ->
     @socket.emit 'rejected'
