@@ -5,14 +5,14 @@ class Map
     @initFields()
 
   initFields: () ->
-    @fields = [1..21].map (i) =>
+    @fields = [1..19].map (i) =>
       if i % 2
-        [1..10].map () => @initField()
+        [1..11].map () => @initField()
       else
-        [1..9].map () => @initField()
+        [1..10].map () => @initField()
 
   initField: () ->
-    type: 'land'
+    type: if Math.random() > 0.9 then 'water' else 'land'
     isCity: false
     isCapital: false
     owner: null

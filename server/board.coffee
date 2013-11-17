@@ -37,7 +37,7 @@ class Board
     @start() if 2 == @players.length
 
   start: () ->
-    player.gameStarted() for player in @players
+    player.gameStarted(@map.fields) for player in @players
     @setCurrentPlayer(@players[0])
 
   setCurrentPlayer: (player) ->
@@ -62,6 +62,9 @@ class Board
     if otherPlayers.length == 1
       otherPlayers[0].won()
       @die()
+
+  mapChange: () ->
+    player.mapChange(@map.fields) for player in @players
 
   die: ->
     player.reject() for player in @players
