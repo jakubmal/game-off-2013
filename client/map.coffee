@@ -19,6 +19,9 @@ class Map
         $field.addClass 'capital' if field.isCapital
         $field.addClass 'city' if field.isCity
 
+        $field.addClass 'army' if field.army
+        $field.attr "data-army", field.army if field.army
+
         $field.addClass "player-#{field.player.color}" if field.player
 
         $row.append $field

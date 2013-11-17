@@ -42,6 +42,10 @@ class Board
 
   start: () ->
     @map.initCapitals @players
+    @startTurn()
+
+  startTurn: () ->
+    @map.genArmies()
     player.gameStarted(@map.fields) for player in @players
     @setCurrentPlayer(@players[0])
 

@@ -78,6 +78,27 @@ class Map
       field = @fields[x][y]
       field.player = player
 
+  getAllFields: () -> _.flatten @fields
+
+  genArmies: () ->
+    fields = @getAllFields()
+    fields = fields.filter (f) -> f.player?
+    fieldsByPlayer = _.groupBy fields, (f) -> f.player.color
+
+    _.pairs(fieldsByPlayer).forEach ([color, fields]) ->
+      console.log color, fields
+
+      fieldsCount = fields.length
+      cities = fields.filter (f) -> f.isCity || f.isCapital
+
+      armyPerCity = parseInt fields.length / cities.length
+      console.log cities
+      cities.forEach (c) ->
+
+        c.army += 5 unless c.isCapital
+        c.army += 15 if c.isCapital
+        c.army += armyPerCity
+
   isInMap: ({x, y}) -> @fields[x]?[y]?
 
 module.exports = Map
