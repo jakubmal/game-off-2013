@@ -1,7 +1,18 @@
 class Map
   constructor: (@$element) ->
+    that = @
+    @$element.on 'click', '.hexagon.army:not(.moved)', (e) => @armyClicked e
+    @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
+    $(document).on 'click', '.end-turn', @onEndTurn
+
+    # @$element.on 'click', '.hexagon', @fieldClicked
+
+  onEndTurn: () ->
+    window.player.endTurn()
 
   change: (fields) ->
+    @fields = fields
+
     @$element.html ''
     x = 0
     fields.forEach (row) =>
@@ -29,5 +40,58 @@ class Map
 
       @$element.append $row
       x++
+
+  armyClicked: (e) ->
+    @$source = $ e.target
+    @sourcePoint =
+      x: parseInt @$source.attr('data-x')
+      y: parseInt @$source.attr('data-y')
+
+    neighbours = @getNeighbours @sourcePoint
+    neighbours.forEach ({x, y}) =>
+      @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
+
+  targetClicked: (e) ->
+    console.log 'dick'
+    @$target = $ e.target
+    point =
+      x: parseInt @$target.attr('data-x')
+      y: parseInt @$target.attr('data-y')
+
+    window.player.makeMove
+      source: @sourcePoint
+      dest: point
+
+
+  getNeighbours: ({x, y}) ->
+    results = []
+
+    results.push point if @isInMap(point = { x: x - 2, y: y })
+    results.push point if @isInMap(point = { x: x + 2, y: y })
+
+    results.push point if @isInMap(point = { x: x - 1, y: y })
+    results.push point if @isInMap(point = { x: x + 1, y: y })
+
+    if x % 2 == 0
+      results.push point if @isInMap(point = { x: x - 1, y: y + 1 })
+      results.push point if @isInMap(point = { x: x + 1, y: y + 1 })
+    else
+      results.push point if @isInMap(point = { x: x - 1, y: y - 1 })
+      results.push point if @isInMap(point = { x: x + 1, y: y - 1 })
+
+    results
+
+  # list of coords which are 2 steps away from given point
+  getFarNeighbours: (point) ->
+    closeNeighbours = @getNeighbours(point)
+    farNeighbours = closeNeighbours.map (p) => @getNeighbours(p)
+    allNeighbours = closeNeighbours.concat(_.flatten(farNeighbours, true))
+
+    allNeighbours = _.uniq(allNeighbours, false, ({x, y}) -> x + 1000 * y)
+    _.without(allNeighbours, _.findWhere(allNeighbours, point))
+
+  isInMap: ({x, y}) -> @fields[x]?[y]?
+
+
 
 @Map = Map

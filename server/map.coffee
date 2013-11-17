@@ -1,15 +1,17 @@
 _ = require 'underscore'
-
+MapGen = require('./mapGen')
 class Map
   constructor: () ->
+    @mapGen = new MapGen()
+    @mapGen.generate(19,11)
     @initFields()
 
   initFields: () ->
     @fields = [1..19].map (i) =>
       if i % 2
-        [1..10].map () => @initField()
+        [1..10].map (e) => @initField(i,e)
       else
-        [1..11].map () => @initField()
+        [1..11].map (e) => @initField(i,e)
 
   initCapitals: (players) ->
 
@@ -30,9 +32,9 @@ class Map
     # @fields[2][9].player = color: 'purple'
 
 
-  initField: () ->
-    type: if Math.random() > 0.5 then 'land' else 'water'
-    isCity: if Math.random() > 0.9 then true else false
+  initField: (i,e) ->
+    type: @mapGen.getLand(i-1,e-1)
+    isCity: @mapGen.getCity(i-1,e-1)
     isCapital: false
     player: null
     army: 0
@@ -100,5 +102,14 @@ class Map
         c.army += armyPerCity
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
+
+  makeMove: (source, dest) ->
+    sourceField = @fields[source.x][source.y]
+    destField = @fields[dest.x][dest.y]
+
+    destField.army += sourceField.army
+    sourceField.army = 0
+    destField.player = sourceField.player
+    @assignNeighboursTo dest, sourceField.player
 
 module.exports = Map

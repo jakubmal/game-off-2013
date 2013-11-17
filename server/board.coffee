@@ -25,6 +25,7 @@ class Board
     @players.push player
     player.mapChange @map.fields
     player.onDisconnect = () => @removePlayer(player)
+    player.onMakeMove = (data) => @playerMakeMove(player, data)
     player.onEndTurn = () => @endTurn(player)
 
   removePlayer: (player) ->
@@ -41,12 +42,17 @@ class Board
     @start() if 2 == @players.length
 
   start: () ->
+    @playersCount = @players.length
+    @turnCount = 0
+
     @map.initCapitals @players
+    player.gameStarted(@map.fields) for player in @players
     @startTurn()
 
   startTurn: () ->
+    @turnCount = 0
     @map.genArmies()
-    player.gameStarted(@map.fields) for player in @players
+    @mapChange()
     @setCurrentPlayer(@players[0])
 
   setCurrentPlayer: (player) ->
@@ -58,11 +64,15 @@ class Board
     @players.push(@players.shift())
     @setCurrentPlayer(@players[0])
 
-  playerMakeMove: (player) ->
-    return unless @currentPlayer == player
+    @turnCount++
+    @startTurn() if @turnCount == @playersCount
+
+  playerMakeMove: (player, {source, dest}) ->
+    @map.makeMove source, dest
+    @mapChange()
 
   endTurn: (player) ->
-    return unless @currentPlayer == player
+    # return unless @currentPlayer == player
     @goToNextPlayer()
 
   playerLost: (player) ->

@@ -16,6 +16,10 @@ class Player
     @socket.on 'unsetCurrent', () ->
       console.log 'unsetCurrent'
 
+  makeMove: (data) ->
+    console.log data
+    @socket.emit 'makeMove', data
+
   endTurn: ->
     @socket.emit 'endTurn'
 
