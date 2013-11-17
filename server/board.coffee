@@ -1,4 +1,5 @@
 _ = require 'underscore'
+Map = require './map'
 
 PLAYERS_LIMIT = 2
 
@@ -6,6 +7,7 @@ class Board
   @PLAYERS_LIMIT: PLAYERS_LIMIT
   constructor: (@key) ->
     @players = []
+    @map = new Map
 
     # who can currently make move
     @currentPlayer = null

@@ -10,6 +10,10 @@ exports.show = (req, res) ->
 exports.index = (req, res) ->
   res.render 'boards', {boards, limit: Board.PLAYERS_LIMIT}
 
+exports.getMap = (req, res) ->
+  board = _.findWhere boards, key: req.query.key
+  res.send fields: board.map.fields
+
 exports.playerSocketHandler = (socket) ->
   socket.emit 'welcome'
   socket.on 'join', ({key}) ->
