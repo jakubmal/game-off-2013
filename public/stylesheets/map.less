@@ -1,0 +1,139 @@
+#map {
+  border: 1px solid red;
+}
+
+/**
+ * Generate repeating hexagonal pattern with CSS3 (SO) - 1 element/ hexagon !!!
+ * http://stackoverflow.com/q/10062887/1397351
+ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+.row { margin: -2.9% 0; text-align: center; }
+
+.row:first-child { margin-top: 2.25%; }
+
+.hexagon {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  margin: 0 1.6%;
+  // padding: 16%;
+  padding: 2.5%;
+  -webkit-transform: rotate(30deg) skewY(30deg) scaleX(.866); /* .866 = sqrt(3)/2 */
+}
+.hexagon:before, .content:after {
+  display: block;
+  position: absolute; /* 86.6% = (sqrt(3)/2)*100% = .866*100% */
+  top: 6.7%; right: 0; bottom: 6.7%; left: 0; /* 6.7% = (100% -86.6%)/2 */
+  -webkit-transform: scaleX(1.155) skewY(-30deg) rotate(-30deg); /* 1.155 = 2/sqrt(3) */
+  background-color: rgba(30,144,255,.56);
+  background-size: cover;
+  content: '';
+}
+.content:after { content: attr(data-content); }
+.ribbon:after {
+  overflow: hidden;
+  top: 50%;
+  margin: -1.2em 0;
+  width: 100%; height: 2.4em;
+  color: white;
+  // font: 1em/2.4 Century Gothic;
+
+  font: 1em/2.4 'FontAwesome';
+}
+.game:after {
+  margin: -.6em 0;
+  height: 1.2em;
+  background: rgba(25,25,112,.56);
+  color: lime;
+  font: 2em/1.2 monospace;
+  text-transform: uppercase;
+}
+.longtext:after {
+  left: 25%; right: 25%;
+  background: none;
+  color: white;
+  text-align: justify;
+}
+
+.hexagon {
+
+  &:hover {
+    opacity: 0.5;
+  }
+
+  &.water {
+    background-color: rgba(30,144,255,.56);
+  }
+
+  &.land:before {
+    background-color: @color-green;
+  }
+
+  &.city:before {
+   background-color: @color-green;
+  }
+
+  &.city:after {
+    content: "\f192";
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  &.army:before {
+    border-radius: 100px;
+
+    border: 15px solid @color-black;
+  }
+
+  &.army:after {
+    content: "\f183" " 95/14";
+  }
+
+  &.army-red:after {
+    background-color: @color-red;
+  }
+
+  &.army-blue:after {
+    background-color: @color-blue-dark;
+  }
+
+  &.army-purple:after {
+    background-color: @color-purple;
+  }
+
+  &.army-green:after {
+    background-color: @color-green-dark;
+  }
+
+  &.city.army:after {
+    content: "\f192  1/23";
+  }
+
+  &.capital:before {
+    border-radius: 100px;
+    border: 15px solid @color-black;
+  }
+
+  &.capital:after {
+    content: "\f024" " 95/14";
+
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  &.capital-red:after {
+    background-color: @color-red;
+  }
+
+  &.capital-green:after {
+    background-color: @color-green-dark;
+  }
+
+  &.capital-blue:after {
+    background-color: @color-blue-dark;
+  }
+
+  &.capital-purple:after {
+    background-color: @color-purple;
+  }
+}
