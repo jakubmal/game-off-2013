@@ -16,7 +16,7 @@ class Player
     @socket.emit 'unsetCurrent'
 
   mapChange: (fields) ->
-    @socket.emi 'mapChange', {fields}
+    @socket.emit 'mapChange', {fields}
 
   reject: () ->
     @socket.emit 'rejected'

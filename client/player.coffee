@@ -7,7 +7,7 @@ class Player
 
     @socket.on 'rejected', () -> window.location = '/games'
 
-    @socket.on 'gameStarted', ({fields}) ->
+    @socket.on 'gameStarted', ({fields}) =>
       @onMapChange fields
 
     @socket.on 'setCurrent', () ->

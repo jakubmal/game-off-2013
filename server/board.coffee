@@ -20,6 +20,7 @@ class Board
       return
 
     @players.push player
+    player.mapChange @map.fields
     player.onDisconnect = () => @removePlayer(player)
     player.onEndTurn = () => @endTurn(player)
 

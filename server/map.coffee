@@ -3,17 +3,32 @@ _ = require 'underscore'
 class Map
   constructor: () ->
     @initFields()
+    @initCapitals()
 
   initFields: () ->
     @fields = [1..19].map (i) =>
       if i % 2
-        [1..11].map () => @initField()
-      else
         [1..10].map () => @initField()
+      else
+        [1..11].map () => @initField()
+
+  initCapitals: () ->
+    @fields[2][0].isCapital = true
+    @fields[2][0].player = color: 'red'
+
+    @fields[16][0].isCapital = true
+    @fields[16][0].player = color: 'blue'
+
+    @fields[16][9].isCapital = true
+    @fields[16][9].player = color: 'green'
+
+    @fields[2][9].isCapital = true
+    @fields[2][9].player = color: 'purple'
+
 
   initField: () ->
-    type: if Math.random() > 0.9 then 'water' else 'land'
-    isCity: false
+    type: if Math.random() > 0.5 then 'land' else 'water'
+    isCity: if Math.random() > 0.9 then true else false
     isCapital: false
     owner: null
     army: 0
