@@ -7,7 +7,6 @@ class Player
     sockets[@id] = socket
 
     @onMakeMove = (->)
-    @onEndTurn = (->)
 
     sockets[@id].emit 'color', {@color}
 

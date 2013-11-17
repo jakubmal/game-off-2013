@@ -1,10 +1,14 @@
 class Map
   constructor: (@$element) ->
     that = @
-    @$element.on 'click', '.hexagon.army', (e) => @armyClicked e
+    @$element.on 'click', '.hexagon.army:not(.moved)', (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
+    $(document).on 'click', '.end-turn', @onEndTurn
 
     # @$element.on 'click', '.hexagon', @fieldClicked
+
+  onEndTurn: () ->
+    window.player.endTurn()
 
   change: (fields) ->
     @fields = fields
