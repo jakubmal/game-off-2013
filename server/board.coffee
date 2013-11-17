@@ -1,5 +1,6 @@
 _ = require 'underscore'
 Map = require './map'
+Player = require './player'
 
 PLAYERS_LIMIT = 2
 
@@ -7,6 +8,7 @@ class Board
   @PLAYERS_LIMIT: PLAYERS_LIMIT
   constructor: (@key) ->
     @players = []
+    @colors = ['red', 'green', 'blue', 'purple']
     @map = new Map
 
     # who can currently make move
@@ -14,10 +16,12 @@ class Board
 
     @onDead = (->)
 
-  addPlayer: (player) ->
+  genPlayer: (socket) ->
     if @players.length >= PLAYERS_LIMIT
       player.reject()
       return
+
+    player = new Player socket, @colors.shift()
 
     @players.push player
     player.mapChange @map.fields

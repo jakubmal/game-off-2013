@@ -1,6 +1,7 @@
 class Player
   constructor: (@socket, key) ->
     @onMapChange = ->
+    @socket.on 'color', ({@color}) => console.log @color
     @socket.on 'mapChange', ({fields}) => @onMapChange fields
 
     @socket.emit 'join', {key}

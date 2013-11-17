@@ -1,6 +1,5 @@
 _ = require 'underscore'
 Board = require './board'
-Player = require './player'
 
 boards = []
 
@@ -23,6 +22,6 @@ exports.playerSocketHandler = (socket) ->
       board.onDead = () -> boards = _.without boards, board
       boards.push board
 
-    player = new Player socket
-    board.addPlayer player
+
+    board.genPlayer socket
     board.startIfFull()

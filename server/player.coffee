@@ -1,7 +1,9 @@
 class Player
-  constructor: (@socket) ->
+  constructor: (@socket, color) ->
     @onMakeMove = (->)
     @onEndTurn = (->)
+
+    @socket.emit 'color', {color}
 
   gameStarted: (fields) ->
     @socket.emit 'gameStarted', {fields}
