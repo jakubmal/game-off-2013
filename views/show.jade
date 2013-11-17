@@ -20,25 +20,27 @@ block content
         .row
           - for (var i = 0; i < 10; ++i)
             - if (i == 0 && j == 1)
-              .hexagon.capital.ribbon.content.capital-red
+              .hexagon.capital.player-red
             - else if (i == 9 && j == 1)
-              .hexagon.capital.ribbon.content.capital-purple
+              .hexagon.capital.player-purple.army
             - else if (i == 0 && j == 8)
-              .hexagon.capital.ribbon.content.capital-blue
+              .hexagon.capital.player-blue
             - else if (i == 9 && j == 8)
-              .hexagon.capital.ribbon.content.capital-green
-            - else if (Math.random() > 0.98)
-              .hexagon.army.army-red.ribbon.content
-            - else if (Math.random() > 0.98)
-              .hexagon.army.army-green.ribbon.content
-            - else if (Math.random() > 0.98)
-              .hexagon.army.army-blue.ribbon.content
-            - else if (Math.random() > 0.98)
-              .hexagon.army.army-purple.ribbon.content
-            - else if (Math.random() > 0.8)
-              .hexagon.ribbon.city.content.army-red.ribbon.content
-            - else if (Math.random() > 0.8)
-              .hexagon.ribbon.city.content.army.army-red.content
+              .hexagon.capital.player-green
+            - else if (Math.random() > 1)
+              .hexagon.army.player-red
+            - else if (Math.random() > 1)
+              .hexagon.army.player-green
+            - else if (Math.random() > 1)
+              .hexagon.army.player-blue
+            - else if (Math.random() > 1)
+              .hexagon.army.player-purple
+            - else if (Math.random() > 1)
+              .hexagon.city.army.player-red
+            - else if (Math.random() > 0.6)
+              .hexagon.city.player-red
+            - else if (Math.random() > 0.6)
+              .hexagon.city
             - else if (Math.random() > 0.3)
               .hexagon.ribbon.city.content
             - else
@@ -50,13 +52,13 @@ block content
           .row
             - for (var i = 0; i < 11; ++i)
               - if (Math.random() > 0.98)
-                .hexagon.army.army-red.ribbon.content(data-content="95/64")
+                .hexagon.army.player-red
               - else if (Math.random() > 0.98)
-                .hexagon.army.army-green.ribbon.content(data-content="95/64")
+                .hexagon.army.player-green
               - else if (Math.random() > 0.98)
-                .hexagon.army.army-blue.ribbon.content(data-content="95/64")
+                .hexagon.army.player-blue
               - else if (Math.random() > 0.98)
-                .hexagon.army.army-purple.ribbon.content(data-content="95/64")
+                .hexagon.army.player-purple
               - else if (Math.random() > 0.3)
                 .hexagon.land
               - else

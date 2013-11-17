@@ -12,7 +12,7 @@
   padding: 0;
 }
 .row {
-  margin: -2.9% 0;
+  margin: -2.8% 0;
   text-align: center;
 }
 .row:first-child {
@@ -28,7 +28,7 @@
   /* .866 = sqrt(3)/2 */
 }
 .hexagon:before,
-.content:after {
+.hexagon:after {
   display: block;
   position: absolute;
   /* 86.6% = (sqrt(3)/2)*100% = .866*100% */
@@ -46,7 +46,7 @@
 .content:after {
   content: attr(data-content);
 }
-.ribbon:after {
+.hexagon:after {
   overflow: hidden;
   top: 50%;
   margin: -1.2em 0;
@@ -54,6 +54,7 @@
   height: 2.4em;
   color: white;
   font: 1em/2.4 'FontAwesome';
+  background-color: rgba(0, 0, 0, 0);
 }
 .game:after {
   margin: -0.6em 0;
@@ -62,13 +63,6 @@
   color: lime;
   font: 2em/1.2 monospace;
   text-transform: uppercase;
-}
-.longtext:after {
-  left: 25%;
-  right: 25%;
-  background: none;
-  color: white;
-  text-align: justify;
 }
 .hexagon:hover {
   opacity: 0.5;
@@ -79,13 +73,6 @@
 .hexagon.land:before {
   background-color: #99c158;
 }
-.hexagon.city:before {
-  background-color: #99c158;
-}
-.hexagon.city:after {
-  content: "\f192";
-  background-color: rgba(0, 0, 0, 0);
-}
 .hexagon.army:before {
   border-radius: 100px;
   border: 15px solid #222222;
@@ -93,17 +80,12 @@
 .hexagon.army:after {
   content: "\f183" " 95/14";
 }
-.hexagon.army-red:after {
-  background-color: #bb515e;
+.hexagon.city:before {
+  background-color: #99c158;
 }
-.hexagon.army-blue:after {
-  background-color: #2d3080;
-}
-.hexagon.army-purple:after {
-  background-color: #853cb2;
-}
-.hexagon.army-green:after {
-  background-color: #223d15;
+.hexagon.city:after {
+  content: "\f192";
+  background-color: rgba(0, 0, 0, 0);
 }
 .hexagon.city.army:after {
   content: "\f192  1/23";
@@ -113,20 +95,23 @@
   border: 15px solid #222222;
 }
 .hexagon.capital:after {
-  content: "\f024" " 95/14";
+  content: "\f024";
   background-color: rgba(0, 0, 0, 0);
 }
-.hexagon.capital-red:after {
+.hexagon.capital.army:after {
+  content: "\f024" " 95/14";
+}
+.hexagon.player-red:after {
   background-color: #bb515e;
 }
-.hexagon.capital-green:after {
+.hexagon.player-purple:after {
+  background-color: #853cb2;
+}
+.hexagon.player-green:after {
   background-color: #223d15;
 }
-.hexagon.capital-blue:after {
+.hexagon.player-blue:after {
   background-color: #2d3080;
-}
-.hexagon.capital-purple:after {
-  background-color: #853cb2;
 }
 html {
   height: 100%;
