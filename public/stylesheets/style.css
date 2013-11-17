@@ -67,7 +67,7 @@
 .hexagon:hover {
   opacity: 0.5;
 }
-.hexagon.water {
+.hexagon.water:before {
   background-color: rgba(30, 144, 255, 0.56);
 }
 .hexagon.land:before {
