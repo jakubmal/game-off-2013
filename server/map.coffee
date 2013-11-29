@@ -1,10 +1,11 @@
 _ = require 'underscore'
-# MapGen = require('./mapGen')
+MapGen = require('./mapGen')
 class Map
   constructor: () ->
-    # @mapGen = new MapGen()
-    # @mapGen.generate(19,11)
+    @mapGen = new MapGen(19,11,24,0.6)
+    @mapGen.generate()
     @initFields()
+    console.log(this.fields)
 
   initFields: () ->
     @fields = [1..19].map (i) =>
@@ -35,10 +36,9 @@ class Map
 
 
   initField: (i,e) ->
-    isCity = Math.random() > 0.9
-
-    isCity: isCity
-    type: if isCity || Math.random() > 0.1 then "land" else "water"
+  
+    isCity: @mapGen.getCity(i-1,e-1)
+    type: @mapGen.getType(i-1,e-1)
     isCapital: false
     player: null
     army: 0
