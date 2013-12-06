@@ -36,30 +36,33 @@ mapGen.prototype.addWater = function (waterCount) {
     waterX = Math.floor(Math.random()*(this.sizeX-1));
     waterY = Math.floor(Math.random()*(this.sizeY-1));
     this.map[waterX][waterY].type = 'water';
-    this.expandWater(waterX,waterY);
+    this.expandWater(waterX,waterY,this.waterPercentage);
   }
 }
-mapGen.prototype.expandWater = function (waterX,waterY) {
-  this.expandWaterMagic(waterX-1,waterY-1);
-  this.expandWaterMagic(waterX,waterY-1);
-  this.expandWaterMagic(waterX-1,waterY);
-  this.expandWaterMagic(waterX+1,waterY);
-  this.expandWaterMagic(waterX,waterY+1);
-  this.expandWaterMagic(waterX+1,waterY+1);
+mapGen.prototype.expandWater = function (waterX,waterY,localWaterPercentage) {
+  this.expandWaterMagic(waterX-1,waterY,localWaterPercentage);
+  this.expandWaterMagic(waterX+1,waterY,localWaterPercentage);
+  this.expandWaterMagic(waterX,waterY+1,localWaterPercentage);
+  this.expandWaterMagic(waterX+1,waterY+1,localWaterPercentage);
+  this.expandWaterMagic(waterX+2,waterY,localWaterPercentage);
+  this.expandWaterMagic(waterX-2,waterY,localWaterPercentage);
 }
-mapGen.prototype.expandWaterMagic = function(waterX,waterY){
-  if (this.waterPercentage < 0.01) {return;}
-  if (this.waterPercentage > Math.random() && this._isInMap(waterX,waterY)) {
+mapGen.prototype.expandWaterMagic = function(waterX,waterY,localWaterPercentage){
+  if (localWaterPercentage < 0.01) {return;}
+  if (localWaterPercentage > Math.random() && this._isInMap(waterX,waterY)) {
         this.map[waterX][waterY].type = 'water';
-        this.waterPercentage = this.waterPercentage/2;
+        localWaterPercentage = localWaterPercentage/1.5;
         this.expandWater(waterX,waterY);
     };
 }
 mapGen.prototype.shouldNotBeWater = function (x,y) { 
     this.map[x][y].type = 'land';
     this.map[x+1][y].type = 'land';
-    this.map[x][y+1].type = 'land';
     this.map[x+1][y+1].type = 'land';
+    this.map[x-1][y+1].type = 'land';
+    this.map[x-1][y].type = 'land';
+    this.map[x+2][y].type = 'land';
+    this.map[x-2][y].type = 'land';
 }
 mapGen.prototype.addCities = function(){
     var sqSizeX = Math.floor((this.sizeX-1)/2);
