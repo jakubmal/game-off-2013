@@ -1,7 +1,6 @@
 class Map
   constructor: (@$element) ->
     that = @
-    console.log ".hexagon.army:not(.moved):not(.targetable).player-#{window.player.color}"
     @$element.on 'click', ".hexagon.army:not(.moved):not(.targetable)", (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
     $(document).on 'click', '.end-turn', @onEndTurn
@@ -45,20 +44,17 @@ class Map
   armyClicked: (e) ->
     @$source = $ e.target
 
-
-    console.log ".player-#{window.player.color}"
     return unless @$source.hasClass("player-#{window.player.color}")
 
     @sourcePoint =
       x: parseInt @$source.attr('data-x')
       y: parseInt @$source.attr('data-y')
 
-    neighbours = @getNeighbours @sourcePoint
+    neighbours = @getFarNeighbours @sourcePoint
     neighbours.forEach ({x, y}) =>
       @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
 
   targetClicked: (e) ->
-    console.log 'dick'
     @$target = $ e.target
     point =
       x: parseInt @$target.attr('data-x')
@@ -67,7 +63,9 @@ class Map
     window.player.makeMove
       source: @sourcePoint
       dest: point
-
+  findArmies: (color) ->
+    allArmies = @$element.find("[data-army].player-"+color).get().length
+    return allArmies
 
   getNeighbours: ({x, y}) ->
     results = []
