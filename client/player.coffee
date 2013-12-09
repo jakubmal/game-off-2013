@@ -21,11 +21,10 @@ class Player
       console.log 'current'
     @socket.on 'unsetCurrent', () ->
       window.player.isCurrent = false
-      console.log 'unCurrent'
+      console.log 'not current'
 
   makeMove: (data) ->
     if @isCurrent == true
-      console.log @movesThisTurn
       @socket.emit 'makeMove', data 
       @movesThisTurn--
 
@@ -39,7 +38,6 @@ class Player
     if armies > MOVES_PER_TURN then return MOVES_PER_TURN else return armies
   endTurn: ->
     @movesThisTurn = @evaluateMovesThisTurn()+1 # don't know why +1 , but otherwise it doesn't work :(
-    console.log @movesThisTurn
     @socket.emit 'endTurn'
 
 @Player = Player

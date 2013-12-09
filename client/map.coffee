@@ -30,8 +30,8 @@ class Map
         $field.addClass 'capital' if field.isCapital
         $field.addClass 'city' if field.isCity
 
-        $field.addClass 'army' if field.army
-        $field.attr "data-army", field.army if field.army
+        $field.addClass 'army' if field.army.count
+        $field.attr "data-army", field.army.count if field.army.count
 
         $field.addClass "player-#{field.player.color}" if field.player
 
@@ -56,6 +56,7 @@ class Map
 
   targetClicked: (e) ->
     @$target = $ e.target
+
     point =
       x: parseInt @$target.attr('data-x')
       y: parseInt @$target.attr('data-y')
@@ -63,6 +64,7 @@ class Map
     window.player.makeMove
       source: @sourcePoint
       dest: point
+
   findArmies: (color) ->
     allArmies = @$element.find("[data-army].player-"+color).get().length
     return allArmies

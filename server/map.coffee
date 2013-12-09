@@ -1,5 +1,6 @@
 _ = require 'underscore'
 MapGen = require('./mapGen')
+Army = require('./army')
 class Map
   constructor: () ->
     @mapGen = new MapGen(19,11,24,0.6)
@@ -41,7 +42,7 @@ class Map
     type: @mapGen.getType(i-1,e-1)
     isCapital: false
     player: null
-    army: 0
+    army: new Army(0,@type)
 
   getNeighbours: ({x, y}) ->
     results = []
@@ -75,7 +76,7 @@ class Map
     nghs = nghs.filter ({x, y}) =>
       field = @fields[x][y]
       return false if field.type == 'water'
-      return false if field.army
+      return false if field.army.count
       return false if field.isCity
       return false if field.isCapital
       true
@@ -92,7 +93,7 @@ class Map
     fieldsByPlayer = _.groupBy fields, (f) -> f.player.color
 
     _.pairs(fieldsByPlayer).forEach ([color, fields]) ->
-      console.log color, fields
+      #console.log color, fields
 
       fieldsCount = fields.length
       cities = fields.filter (f) -> f.isCity || f.isCapital
@@ -100,10 +101,9 @@ class Map
       armyPerCity = parseInt fields.length / cities.length
       console.log cities
       cities.forEach (c) ->
-
-        c.army += 5 unless c.isCapital
-        c.army += 15 if c.isCapital
-        c.army += armyPerCity
+        c.army.count += 5 unless c.isCapital
+        c.army.count += 15 if c.isCapital
+        c.army.count += armyPerCity
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
 
@@ -111,23 +111,23 @@ class Map
     sourceField = @fields[source.x][source.y]
     destField = @fields[dest.x][dest.y]
 
-    console.log sourceField, destField
+    #console.log sourceField, destField
 
     if sourceField.player != destField.player
 
-      if sourceField.army > destField.army
-        destField.army = sourceField.army - destField.army
-        sourceField.army = 0
+      if sourceField.army.count > destField.army.count
+        destField.army.count = sourceField.army.count - destField.army.count
+        sourceField.army.count = 0
         destField.player = sourceField.player
         @assignNeighboursTo dest, sourceField.player
       else
-        destField.army -= sourceField.army
-        sourceField.army = 0
+        destField.army.count -= sourceField.army.count
+        sourceField.army.count = 0
 
     else
 
-      destField.army += sourceField.army
-      sourceField.army = 0
+      destField.army.count += sourceField.army.count
+      sourceField.army.count = 0
       destField.player = sourceField.player
       @assignNeighboursTo dest, sourceField.player
 
