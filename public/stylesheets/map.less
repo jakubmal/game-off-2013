@@ -99,17 +99,29 @@
     content: "\f192";
     background-color: rgba(0, 0, 0, 0);
   }
+  &.harbor:before {
+   background-color: @color-green;
+  }
+
+  &.harbor:after {
+    content: "\f13d";
+    background-color: rgba(0, 0, 0, 0);
+  }
 
   ///
   // City player
   ///
 
   ///
-  // City army
+  // City & harbor army
   ///
 
   &.city.army:after {
     content: "\f192" attr(data-army);
+  }
+
+  &.harbor:after {
+    content: "\f13d" attr(data-army);
   }
 
   ///

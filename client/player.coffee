@@ -27,7 +27,6 @@ class Player
     if @isCurrent == true
       @socket.emit 'makeMove', data 
       @movesThisTurn--
-
     else
       console.log 'not Your Turn'
       @socket.emit 'notYourTurn'
@@ -36,8 +35,12 @@ class Player
   evaluateMovesThisTurn: () ->
     armies = window.map.findArmies(@color)
     if armies > MOVES_PER_TURN then return MOVES_PER_TURN else return armies
+
   endTurn: ->
     @movesThisTurn = @evaluateMovesThisTurn()+1 # don't know why +1 , but otherwise it doesn't work :(
     @socket.emit 'endTurn'
+
+  giveSpeach: ->
+    @socket.emit 'speach'
 
 @Player = Player

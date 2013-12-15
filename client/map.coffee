@@ -27,8 +27,9 @@ class Map
         $field.addClass 'land' if field.type == 'land'
         $field.addClass 'water' if field.type == 'water'
 
-        $field.addClass 'capital' if field.isCapital
-        $field.addClass 'city' if field.isCity
+        $field.addClass 'capital' if field.city == 'capital'
+        $field.addClass 'city' if field.city == 'city'
+        $field.addClass 'harbor' if field.city == 'harbor'
 
         $field.addClass 'army' if field.army.count
         $field.attr "data-army", field.army.count if field.army.count
@@ -51,8 +52,25 @@ class Map
       y: parseInt @$source.attr('data-y')
 
     neighbours = @getFarNeighbours @sourcePoint
-    neighbours.forEach ({x, y}) =>
-      @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
+
+
+    # Army stands on land
+    if @$source.hasClass 'land'
+      neighbours.forEach ({x, y}) =>
+        @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
+    #Army stands on water    
+    else   
+      #Army can land on nearest land field
+      landingNeighbours = @getNeighbours @sourcePoint
+      landingNeighbours.forEach ({x,y}) =>
+        @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
+      neighbours.forEach ({x, y}) =>
+        @$element.find("[data-x=#{x}][data-y=#{y}].water").addClass 'targetable'
+    #Army is in harbor
+    if @$source.hasClass 'harbor' 
+      waterNeighbours = @getNeighbours @sourcePoint 
+      waterNeighbours.forEach ({x,y}) =>
+        @$element.find("[data-x=#{x}][data-y=#{y}].water").addClass 'targetable'
 
   targetClicked: (e) ->
     @$target = $ e.target
@@ -66,8 +84,8 @@ class Map
       dest: point
 
   findArmies: (color) ->
-    allArmies = @$element.find("[data-army].player-"+color).get().length
-    return allArmies
+    allArmiesCount = @$element.find("[data-army].player-"+color).get().length
+    return allArmiesCount
 
   getNeighbours: ({x, y}) ->
     results = []

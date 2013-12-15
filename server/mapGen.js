@@ -12,14 +12,13 @@ mapGen.prototype.getType = function (x,y){
   return this.map[x][y].type;
 }
 mapGen.prototype.getCity = function (x,y){
-  return this.map[x][y].isCity;
+  return this.map[x][y].city;
 }
-
 mapGen.prototype.generate = function () {
   for(var i =0;i<this.sizeX;i++){
     this.map.push([]);
     for (var j = 0;j < this.sizeY ; j++) {
-      this.map[i].push({type:'land',isCity : false});
+      this.map[i].push({type:'land',city: null});
     };
   }
   this.addWater(4);
@@ -27,7 +26,7 @@ mapGen.prototype.generate = function () {
   this.shouldNotBeWater(2,9);
   this.shouldNotBeWater(16,0);
   this.shouldNotBeWater(16,9);
-  this.addCities();
+  this.urbanize();
   return this.map;
 }
 mapGen.prototype.addWater = function (waterCount) {
@@ -64,56 +63,57 @@ mapGen.prototype.shouldNotBeWater = function (x,y) {
     this.map[x+2][y].type = 'land';
     this.map[x-2][y].type = 'land';
 }
-mapGen.prototype.addCities = function(){
-    var sqSizeX = Math.floor((this.sizeX-1)/2);
-    var sqSizeY = Math.floor((this.sizeY-1)/2);
+mapGen.prototype.addCities = function(borderXmin,borderXmax,borderYmin,borderYmax){
     var cityCount = Math.round(this.townCount/4);
-    var citiesSet = 0,posX,posY;
-    var breakCounter = 0;
-    // 1 sq
-    while( citiesSet < cityCount && breakCounter < 10000 ){
-        breakCounter++;
-        posX = Math.floor(Math.random()*sqSizeX);
-        posY = Math.floor(Math.random()*sqSizeY);
-        if(this.map[posX][posY].isCity == false && this.map[posX][posY].type == 'land' ){
-            this.map[posX][posY].isCity = true;
+    var citiesSet = 0,posX=0,posY0;
+    var safetyBreakCounter = 0;
+    while( citiesSet < cityCount && safetyBreakCounter < 10000 ){
+        safetyBreakCounter++;
+        posX = Math.floor(Math.random()*(borderXmax-borderXmin))+borderXmin;
+        posY = Math.floor(Math.random()*(borderYmax-borderYmin))+borderYmin;
+        // console.log('posx:'+posX+'posY'+posY);
+        if(this._isInMap(posX,posY) && this.map[posX][posY].city == null && this.map[posX][posY].type == 'land' ){
+            if(this.isHarbor(posX,posY)) this.map[posX][posY].city = 'harbor';
+            else this.map[posX][posY].city = 'city';
             citiesSet++;
         }
     }
-    // 2 sq
-    citiesSet = 0;
-    while( citiesSet < cityCount && breakCounter < 10000 ){
-              breakCounter++;
-        posX = Math.floor(Math.random()*sqSizeX)+sqSizeX;
-        posY = Math.floor(Math.random()*sqSizeY);
-        if(this.map[posX][posY].isCity == false && this.map[posX][posY].type == 'land'){
-            this.map[posX][posY].isCity = true;
-            citiesSet++;
-        }
-    }
-    // 3 sq
-     citiesSet = 0;
-    while( citiesSet < cityCount && breakCounter < 10000 ){
-              breakCounter++;
-        posX = Math.floor(Math.random()*sqSizeX);
-        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;
-        if(this.map[posX][posY].isCity == false  && this.map[posX][posY].type == 'land'){
-            this.map[posX][posY].isCity = true;
-            citiesSet++;
-        }
-    }
-    //4 sq
-     citiesSet = 0;
-    while( citiesSet < cityCount && breakCounter < 10000 ){
-        breakCounter++;
-        posX = Math.floor(Math.random()*sqSizeX)+sqSizeX;
-        posY = Math.floor(Math.random()*sqSizeY)+sqSizeY;
-        if(this.map[posX][posY].isCity == false  && this.map[posX][posY].type == 'land'){
-            this.map[posX][posY].isCity = true;
-            citiesSet++;
-        }
-    }
+}
+mapGen.prototype.urbanize = function(){
+  var sqSizeX = Math.floor((this.sizeX-1)/2);
+  var sqSizeY = Math.floor((this.sizeY-1)/2);
+ 
+  this.addCities(0,sqSizeX,0,sqSizeY);
+  this.addCities(sqSizeX,sqSizeX*2,0,sqSizeY);
+  this.addCities(0,sqSizeX,sqSizeY,sqSizeY*2);
+  this.addCities(sqSizeX,sqSizeX*2,sqSizeY,sqSizeY*2);   
+};
+mapGen.prototype.isHarbor = function (x,y){
+  var neighbours = this.getNeighbours(x,y);
+  var nX,nY;
+  for (var i = 0; i < neighbours.length; i++){
+    nX = neighbours[i].x;
+    nY = neighbours[i].y;
+    if(this.map[nX][nY].type === 'water') return true;
+  };
+  return false;
+};
 
+mapGen.prototype.getNeighbours = function (x,y){
+  results = [];
+
+  if(this._isInMap(x-2,y)) results.push({x: x-2,y:y});  
+  if(this._isInMap(x+2,y)) results.push({x: x+2,y:y});  
+  if(this._isInMap(x+1,y)) results.push({x: x+1,y:y}); 
+  if(this._isInMap(x-1,y)) results.push({x: x-1,y:y});
+  if(x%2 === 0){ 
+    if(this._isInMap(x-1,y+1)) results.push({x: x-1,y:y+1}); 
+    if(this._isInMap(x+1,y+1)) results.push({x: x+1,y:y+1});
+  }else{
+    if(this._isInMap(x-1,y-1)) results.push({x: x-1,y:y-1}); 
+    if(this._isInMap(x+1,y-1)) results.push({x: x+1,y:y-1});
+  } 
+   return  results;
 }
 
 module.exports = mapGen;
