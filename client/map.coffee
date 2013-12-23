@@ -4,6 +4,7 @@ class Map
     @$element.on 'click', ".hexagon.army:not(.moved):not(.targetable)", (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
     $(document).on 'click', '.end-turn', @onEndTurn
+    $(document).keyup  (e) => @deselect e
 
     # @$element.on 'click', '.hexagon', @fieldClicked
 
@@ -32,8 +33,7 @@ class Map
         $field.addClass 'harbor' if field.city == 'harbor'
 
         $field.addClass 'army' if field.army.count
-        $field.attr "data-army", field.army.count if field.army.count
-
+        $field.attr "data-army", field.army.count + '/' + field.army.morale if field.army.count
         $field.addClass "player-#{field.player.color}" if field.player
 
         $row.append $field
@@ -41,6 +41,11 @@ class Map
 
       @$element.append $row
       x++
+
+  deselect: (e) ->
+    console.log e.keyCode
+    if e.keyCode == 27
+      @$element.find(".targetable").removeClass 'targetable'  
 
   armyClicked: (e) ->
     @$source = $ e.target
@@ -53,7 +58,6 @@ class Map
 
     neighbours = @getFarNeighbours @sourcePoint
 
-
     # Army stands on land
     if @$source.hasClass 'land'
       neighbours.forEach ({x, y}) =>
@@ -64,7 +68,7 @@ class Map
       landingNeighbours = @getNeighbours @sourcePoint
       landingNeighbours.forEach ({x,y}) =>
         @$element.find("[data-x=#{x}][data-y=#{y}]:not(.water)").addClass 'targetable'
-      neighbours.forEach ({x, y}) =>
+      neighbours.forEach ({x,y}) =>
         @$element.find("[data-x=#{x}][data-y=#{y}].water").addClass 'targetable'
     #Army is in harbor
     if @$source.hasClass 'harbor' 
@@ -78,6 +82,8 @@ class Map
     point =
       x: parseInt @$target.attr('data-x')
       y: parseInt @$target.attr('data-y')
+
+    console.dir @$element.find("[data-x=#{point.x}][data-y=#{point.y}]").addClass 'moved11'
 
     window.player.makeMove
       source: @sourcePoint

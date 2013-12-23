@@ -1,6 +1,6 @@
 Player = @Player
 
-socket = io.connect 'http://192.168.1.18:3000'
+socket = io.connect 'http://192.168.1.21:3000'
 socket.on 'welcome', () ->
   console.log "key: #{window.key}"
   window.player = player = new Player socket, window.key

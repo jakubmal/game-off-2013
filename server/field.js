@@ -1,6 +1,5 @@
 var Army = require('./army');
 function Field(city,type){
-	this.id = Math.random()*10;
 	this.city = city;
 	this.type = type;
 	this.player = null;

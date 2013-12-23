@@ -29,17 +29,13 @@ class Board
     player.onEndTurn = () => @endTurn(player)
 
   removePlayer: (player) ->
-    console.log 'removePlayer'
-
     @players = _.without @players, player
-    @playerLost player
+    player.lost()
 
-    console.log "players length: #{@players.length}"
     @die() if @players.length == 0
 
   startIfFull: () ->
-    console.log @players.length
-    @start() if 2 == @players.length
+    @start() if PLAYERS_LIMIT == @players.length
 
   start: () ->
     @playersCount = @players.length
@@ -49,11 +45,13 @@ class Board
     player.gameStarted(@map.fields) for player in @players
     @startTurn()
 
+
   startTurn: () ->
     @turnCount = 0
     @map.genArmies()
     @mapChange()
     @setCurrentPlayer(@players[0])
+    
 
   setCurrentPlayer: (player) ->
     @currentPlayer.unsetCurrent() if @currentPlayer?
@@ -63,12 +61,10 @@ class Board
   goToNextPlayer: () ->
     @players.push(@players.shift())
     @setCurrentPlayer(@players[0])
-
     @turnCount++
     @startTurn() if @turnCount == @playersCount
 
   playerMakeMove: (player, {source, dest}) ->
-    # return unless @currentPlayer == player
     @map.makeMove source, dest
     @mapChange()
 
@@ -76,20 +72,15 @@ class Board
     # return unless @currentPlayer == player
     @goToNextPlayer()
 
-  playerLost: (player) ->
-    player.lost()
-    otherPlayers = _.without @players, player
-    if otherPlayers.length == 1
-      otherPlayers[0].won()
-      @die()
-
+  lookForWinner: () ->
+    if players.length == 1
+      players[0].won()
   mapChange: () ->
     player.mapChange(@map.fields) for player in @players
 
   die: ->
     player.reject() for player in @players
 
-    console.log 'ondead'
     @onDead()
 
 module.exports = Board
