@@ -27,12 +27,14 @@ class Board
     player.onDisconnect = () => @removePlayer(player)
     player.onMakeMove = (data) => @playerMakeMove(player, data)
     player.onEndTurn = () => @endTurn(player)
+    player.onGiveSpeach = () => @map.giveSpeach(player)
+    player.onCountArmies = () => @countArmies(player)
 
   removePlayer: (player) ->
     @players = _.without @players, player
-    player.lost()
-
+    @players[0].won() if @players.length == 1
     @die() if @players.length == 0
+    @map.removeArmies(player)
 
   startIfFull: () ->
     @start() if PLAYERS_LIMIT == @players.length
@@ -43,16 +45,14 @@ class Board
 
     @map.initCapitals @players
     player.gameStarted(@map.fields) for player in @players
+    @setCurrentPlayer(@players[0])
     @startTurn()
-
 
   startTurn: () ->
     @turnCount = 0
     @map.genArmies()
     @mapChange()
-    @setCurrentPlayer(@players[0])
     
-
   setCurrentPlayer: (player) ->
     @currentPlayer.unsetCurrent() if @currentPlayer?
     @currentPlayer = player
@@ -68,19 +68,17 @@ class Board
     @map.makeMove source, dest
     @mapChange()
 
-  endTurn: (player) ->
-    # return unless @currentPlayer == player
+  endTurn: () ->
     @goToNextPlayer()
 
-  lookForWinner: () ->
-    if players.length == 1
-      players[0].won()
   mapChange: () ->
     player.mapChange(@map.fields) for player in @players
 
   die: ->
     player.reject() for player in @players
-
     @onDead()
+
+  countArmies: (player)->
+    player.sendArmiesCount(@map.countArmies(player))
 
 module.exports = Board

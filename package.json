@@ -1,9 +1,15 @@
 {
-  "name": "application-name",
+  "name": "js-empire",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "test": "./node_modules/.bin/mocha tests/all.js"
+  },
+  "devDependencies": {
+    "webmake": "~0.3.21",
+    "mocha": "~1.13.0",
+    "should": "~2.0.2"
   },
   "dependencies": {
     "express": "3.4.4",

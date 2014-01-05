@@ -94,8 +94,18 @@
   content: "\f192";
   background-color: rgba(0, 0, 0, 0);
 }
+.hexagon.harbor:before {
+  background-color: #99c158;
+}
+.hexagon.harbor:after {
+  content: "\f13d";
+  background-color: rgba(0, 0, 0, 0);
+}
 .hexagon.city.army:after {
   content: "\f192" attr(data-army);
+}
+.hexagon.harbor:after {
+  content: "\f13d" attr(data-army);
 }
 .hexagon.capital:before {
   border-radius: 100px;
@@ -106,7 +116,7 @@
   background-color: rgba(0, 0, 0, 0);
 }
 .hexagon.capital.army:after {
-  content: "\f024" " " attr(data-army);
+  content: "\f024" attr(data-army);
 }
 .hexagon.player-red:after {
   background-color: #bb515e;

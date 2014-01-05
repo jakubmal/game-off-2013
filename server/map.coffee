@@ -3,6 +3,8 @@ MapGen = require './mapGen'
 Army = require './army'
 Field = require './field'
 
+SPEACH_COEFFICIENT = 2
+
 class Map
   constructor: () ->
     @mapGen = new MapGen(19,11,24,0.6)
@@ -12,34 +14,30 @@ class Map
   initFields: () ->
     @fields = [1..19].map (i) =>
       if i % 2
-        [1..10].map (e) => new Field(@mapGen.getCity(i-1,e-1),@mapGen.getType(i-1,e-1));
+        [1..10].map (e) => new Field(@mapGen.getCity(i-1,e-1),@mapGen.getType(i-1,e-1))
       else
-        [1..11].map (e) => new Field(@mapGen.getCity(i-1,e-1),@mapGen.getType(i-1,e-1));
+        [1..11].map (e) => new Field(@mapGen.getCity(i-1,e-1),@mapGen.getType(i-1,e-1))
 
   initCapitals: (players) ->
 
     playerRed = _.findWhere players, color: 'red'
     @fields[2][0].city = 'capital'
     @fields[2][0].player = playerRed
-    @fields[2][0].firstOwner = playerRed
     @assignNeighboursTo {x: 2, y: 0}, playerRed
     
     # playerBlue = _.findWhere players, color: 'blue'
     # @fields[16][0].city = 'capital'
     # @fields[16][0].player = playerBlue
-    # @fields[16][0].firstOwner = playerBlue
     # @assignNeighboursTo {x: 16, y: 0}, playerBlue
 
     playerGreen = _.findWhere players, color: 'green'
     @fields[16][9].city = 'capital'
     @fields[16][9].player = playerGreen
-    @fields[16][9].firstOwner = playerGreen
     @assignNeighboursTo {x: 16, y: 9}, playerGreen
 
     # playerPurple = _.findWhere players, color: 'purple'
     # @fields[2][9].city = 'capital'
     # @fields[2][9].player = playerPurple
-    # @fields[2][9].firstOwner = playerPurple 
     # @assignNeighboursTo {x: 2, y: 9}, playerPurple
 
   getNeighbours: ({x, y}) ->
@@ -74,7 +72,7 @@ class Map
     nghs = nghs.filter ({x, y}) =>
       field = @fields[x][y]
       return false if field.type == 'water'
-      return false if field.army.count
+      return false if field.army?
       return false if field.isCity()
       return false if field.isCapital()
       true
@@ -91,16 +89,16 @@ class Map
     fieldsByPlayer = _.groupBy fields, (f) -> f.player.color
 
     _.pairs(fieldsByPlayer).forEach ([color, fields]) ->
-      #console.log color, fields
-
       fieldsCount = fields.length
       cities = fields.filter (f) -> f.isCity()
 
       armyPerCity = parseInt fields.length / cities.length
       cities.forEach (c) ->
+        c.army = new Army(0,'land') if c.army == null
         c.army.count += 5 unless c.isCapital()
         c.army.count += 15 if c.isCapital()
         c.army.count += armyPerCity
+        c.army.normalize()
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
 
@@ -108,26 +106,50 @@ class Map
     sourceField = @fields[source.x][source.y]
     destField = @fields[dest.x][dest.y]
 
-    if destField.player != null && sourceField.player != destField.player 
-      
-      if sourceField.army.getPower() > destField.army.getPower() 
-        destField.player.lost() if destField.city == 'capital'
-        
-        sourceField.army.fight(destField.army)
+    destField.player = sourceField.player unless destField.army?  #simplifies problem, but water is colored
+
+    switch destField.player
+      when null 
         destField.army = sourceField.army
-        sourceField.army = new Army(0,'land')
         destField.player = sourceField.player
-
         @assignNeighboursTo dest, sourceField.player
-      else
-        destField.army.fight(sourceField.army)   
-    else
 
-      destField.army.join(sourceField.army);
-      destField.player = sourceField.player
-      @assignNeighboursTo dest, sourceField.player
+      when sourceField.player
+        if destField.army? then destField.army.join(sourceField.army)
+        else destField.army = sourceField.army
+        @assignNeighboursTo dest, sourceField.player
+      
+      # destField.player != sourceField.player
+      else 
+        if sourceField.army.getPower() > destField.army.getPower() 
+          sourceField.army.fight(destField.army)
+          destField.army = sourceField.army
+          destField.player.lost() if destField.city == 'capital'
+          destField.player = sourceField.player
+          @assignNeighboursTo dest, sourceField.player
+        else
+          destField.army.fight(sourceField.army)
 
-    sourceField.army.die()
+    sourceField.army = null
+    destField.army.learnFromTravel()
     destField.army.normalize()
+
+  removeArmies: (player) ->
+    fields = @getAllFields()
+    playerFields = fields.filter (f) -> f.player == player
+    playerFields.forEach (field) ->
+      field.army = null
+      field.player = null
+
+  giveSpeach: (player) ->
+    fields = @getAllFields()
+    playerFields = fields.filter (f) -> f.player == player
+    playerFields.forEach (field) ->
+      field.army.morale = SPEACH_COEFFICIENT * field.army.morale
+      
+  countArmies: (player) ->
+    fields = @getAllFields()
+    playerFields = fields.filter (f) -> f.player == player && f.army?
+    return playerFields.length
 
 module.exports = Map

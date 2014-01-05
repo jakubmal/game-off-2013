@@ -4,6 +4,7 @@ class Map
     @$element.on 'click', ".hexagon.army:not(.moved):not(.targetable)", (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
     $(document).on 'click', '.end-turn', @onEndTurn
+    $(document).on 'click', '.give-speach', @onGiveSpeach
     $(document).keyup  (e) => @deselect e
 
     # @$element.on 'click', '.hexagon', @fieldClicked
@@ -11,6 +12,9 @@ class Map
   onEndTurn: () ->
     window.player.endTurn()
 
+  onGiveSpeach: () ->
+    window.player.giveSpeach()
+    
   change: (fields) ->
     @fields = fields
 
@@ -29,11 +33,11 @@ class Map
         $field.addClass 'water' if field.type == 'water'
 
         $field.addClass 'capital' if field.city == 'capital'
-        $field.addClass 'city' if field.city == 'city'
+        $field.addClass 'city' if field.city != null
         $field.addClass 'harbor' if field.city == 'harbor'
 
-        $field.addClass 'army' if field.army.count
-        $field.attr "data-army", field.army.count + '/' + field.army.morale if field.army.count
+        $field.addClass 'army' if field.army?
+        $field.attr "data-army", field.army.count + '/' + field.army.morale if field.army?
         $field.addClass "player-#{field.player.color}" if field.player
 
         $row.append $field
@@ -41,9 +45,8 @@ class Map
 
       @$element.append $row
       x++
-
+      
   deselect: (e) ->
-    console.log e.keyCode
     if e.keyCode == 27
       @$element.find(".targetable").removeClass 'targetable'  
 
@@ -51,6 +54,8 @@ class Map
     @$source = $ e.target
 
     return unless @$source.hasClass("player-#{window.player.color}")
+
+    @$element.find(".targetable").removeClass 'targetable'  
 
     @sourcePoint =
       x: parseInt @$source.attr('data-x')
@@ -83,14 +88,14 @@ class Map
       x: parseInt @$target.attr('data-x')
       y: parseInt @$target.attr('data-y')
 
-    console.dir @$element.find("[data-x=#{point.x}][data-y=#{point.y}]").addClass 'moved11'
-
     window.player.makeMove
       source: @sourcePoint
       dest: point
 
   findArmies: (color) ->
-    allArmiesCount = @$element.find("[data-army].player-"+color).get().length
+    allArmiesCount = @$element.find(".army.player-"+color).get().length
+    unoccupiedCities = @$element.find(".city.player-"+color+":not(.army)").get()
+    console.dir unoccupiedCities
     return allArmiesCount
 
   getNeighbours: ({x, y}) ->

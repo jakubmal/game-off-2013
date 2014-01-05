@@ -8,6 +8,7 @@ class Player
     @onMapChange = ->
     @socket.on 'color', ({@color}) => console.log @color
     @socket.on 'mapChange', ({fields}) => @onMapChange fields
+    @socket.on 'movesCount', ({movesCount}) => @movesThisTurn = movesCount
 
     @socket.emit 'join', {key}
 
@@ -17,41 +18,49 @@ class Player
       @onMapChange fields
 
     @socket.on 'setCurrent', () ->
-      window.player.isCurrent = true
+      _this.isCurrent = true
+      alertify.success 'Your move'
       console.log 'current'
+
     @socket.on 'unsetCurrent', () ->
-      window.player.isCurrent = false
+      _this.isCurrent = false
       console.log 'not current'
+
     @socket.on 'lost', () ->
       alertify.set({labels:{
         ok: 'Back to game list',
         cancel: 'Stay and watch game'
       }})
-      alertify.confirm('Your lost')
+      confirmed = alertify.confirm 'You lost'
+      console.log confirmed
+      #if confirmed then window.location.href = '/games'
+
     @socket.on 'won', ()->
-      alertify.alert('Congratulations - You won!')
+      alertify.alert 'Congratulations - You won!'
+      #window.location.href = '/games'
 
   makeMove: (data) ->
     if @isCurrent == true
       @socket.emit 'makeMove', data 
       @movesThisTurn--
     else
-      alertify.error('Wait for your turn')
+      alertify.error 'Wait for your turn'
       console.log 'not Your Turn'
-      @socket.emit 'notYourTurn'
     @endTurn() if @movesThisTurn == 0
     
   evaluateMovesThisTurn: () ->
-    armiesCount = window.map.findArmies(@color)
-    if armiesCount > MOVES_PER_TURN then return MOVES_PER_TURN else return armiesCount
-
+    # armiesFound = window.map.findArmies(@color)
+    # console.log armiesFound
+    # if armiesFound > MOVES_PER_TURN then @movesThisTurn =  MOVES_PER_TURN else @movesThisTurn = armiesFound
+    @socket.emit 'findArmies'
   endTurn: ->
     alertify.log('Turn has ended')
-    @movesThisTurn = @evaluateMovesThisTurn()+1 # don't know why +1 , but otherwise it doesn't work :(
+    @evaluateMovesThisTurn()
     @socket.emit 'endTurn'
 
   giveSpeach: ->
-
-    @socket.emit 'speach'
+    @socket.emit 'giveSpeach'
+  surrender: ->
+    @socket.emit 'surrender'
 
 @Player = Player

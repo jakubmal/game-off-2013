@@ -1,9 +1,8 @@
-var Army = require('./army');
 function Field(city,type){
 	this.city = city;
 	this.type = type;
 	this.player = null;
-	this.army = new Army(0,this.type);
+	this.army = null;
 };
 Field.prototype.isCapital = function () {
 	return this.city === 'capital'; 
