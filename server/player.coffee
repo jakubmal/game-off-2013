@@ -16,8 +16,8 @@ class Player
     sockets[@id].on 'endTurn', () => @onEndTurn()
     sockets[@id].on 'disconnect', () => @onDisconnect()
     sockets[@id].on 'findArmies', () => @onCountArmies()
-    # sockets[@id].on 'surrender', () => @onDisconnect()
-    # sockets[@id].on 'giveSpeach', () => @onGiveSpeach()
+    sockets[@id].on 'surrender', () => @onDisconnect()
+    sockets[@id].on 'giveSpeach', () => @onGiveSpeach()
 
   setCurrent: () ->
     sockets[@id].emit 'setCurrent'

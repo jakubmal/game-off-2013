@@ -7,8 +7,6 @@ class Map
     $(document).on 'click', '.give-speach', @onGiveSpeach
     $(document).keyup  (e) => @deselect e
 
-    # @$element.on 'click', '.hexagon', @fieldClicked
-
   onEndTurn: () ->
     window.player.endTurn()
 

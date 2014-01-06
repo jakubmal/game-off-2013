@@ -56,7 +56,7 @@ class Map
       results.push point if @isInMap(point = { x: x - 1, y: y - 1 })
       results.push point if @isInMap(point = { x: x + 1, y: y - 1 })
 
-    results
+    return results
 
   # list of coords which are 2 steps away from given point
   getFarNeighbours: (point) ->
@@ -123,16 +123,15 @@ class Map
       else 
         if sourceField.army.getPower() > destField.army.getPower() 
           sourceField.army.fight(destField.army)
-          destField.army = sourceField.army
           destField.player.lost() if destField.city == 'capital'
+          destField.army = sourceField.army
           destField.player = sourceField.player
           @assignNeighboursTo dest, sourceField.player
         else
           destField.army.fight(sourceField.army)
 
     sourceField.army = null
-    destField.army.learnFromTravel()
-    destField.army.normalize()
+    # destField.army.learnFromTravel()
 
   removeArmies: (player) ->
     fields = @getAllFields()

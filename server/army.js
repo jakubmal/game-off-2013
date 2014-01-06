@@ -9,6 +9,7 @@ function Army(count,type){
 	this.count = count;
 	this.morale = DEFAULT_MORALE;
 	this.type = type
+	this.moved = false;
 };
 Army.prototype.landing = function () {
 	this.type = 'land';
