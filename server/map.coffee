@@ -142,7 +142,7 @@ class Map
 
   giveSpeach: (player) ->
     fields = @getAllFields()
-    playerFields = fields.filter (f) -> f.player == player
+    playerFields = fields.filter (f) -> f.player == player && f.army?
     playerFields.forEach (field) ->
       field.army.morale = SPEACH_COEFFICIENT * field.army.morale
       

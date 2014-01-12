@@ -49,6 +49,8 @@ describe('Army',function (){
       var army = [];
       var enemy = [];
       var output = [];
+      var bigger = new Army(50,'land');
+      var smaller = new Army(10,'land');
 
       for(var i = 0; i < 12;i++){
         army.push(new Army(30,'land'));
@@ -64,6 +66,10 @@ describe('Army',function (){
       assert.equal(army[10].count,1);
       assert.equal(army[10].morale,14);
       assert.equal(army[11].count,0);
+
+      // shouldn't happen, bigger.fight(smaller) would be called instead
+      smaller.fight(bigger);
+      assert.equal(smaller.count,0);
 
     });
   });

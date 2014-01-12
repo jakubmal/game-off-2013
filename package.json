@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "./node_modules/.bin/mocha tests/all.js"
+    "test": "./node_modules/.bin/mocha tests/all.js -R list"
   },
   "devDependencies": {
     "webmake": "~0.3.21",

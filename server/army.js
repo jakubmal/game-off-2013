@@ -20,11 +20,9 @@ Army.prototype.swim = function () {
 Army.prototype.normalize = function () {
 	if(this.count < 0){
 		this.count = 0;
-		console.log('Error: count below 0');
 	}
 	if(this.morale < 0){
 		this.morale = 0;
-		console.log('Error: morale below 0');
 	}
 	if(this.count > MAX_ARMY_COUNT ){
 		this.count = MAX_ARMY_COUNT;
