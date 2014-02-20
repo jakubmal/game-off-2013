@@ -1,5 +1,5 @@
-#map {
-  border: 1px solid red;
+.map {
+  margin-top: -10px;
 }
 
 /**
@@ -21,12 +21,14 @@
   // padding: 16%;
   padding: 2.5%;
   -webkit-transform: rotate(30deg) skewY(30deg) scaleX(.866); /* .866 = sqrt(3)/2 */
+  transform: rotate(30deg) skewY(30deg) scaleX(.866);
 }
 .hexagon:before, .hexagon:after {
   display: block;
   position: absolute; /* 86.6% = (sqrt(3)/2)*100% = .866*100% */
   top: 6.7%; right: 0; bottom: 6.7%; left: 0; /* 6.7% = (100% -86.6%)/2 */
   -webkit-transform: scaleX(1.155) skewY(-30deg) rotate(-30deg); /* 1.155 = 2/sqrt(3) */
+  transform: scaleX(1.155) skewY(-30deg) rotate(-30deg);
   background-color: rgba(30,144,255,.56);
   background-size: cover;
   content: '';

@@ -2,23 +2,13 @@ extends layout
 
 block content
   #container
-    //- .header
-    //-   header
-    //-     h3 HexEmpire
-    //-   nav
-    //-     ul
-    //-       li a
-    //-       li b
-    //-       li c
-
-    //-   div(style="clear: both;")
-
-    a.end-turn(href="#") End turn!!!
-    
-    a.give_speach(href="#") Give Speach
-
+    div.nav
+      div.end-turn.button.fa 
+      div.give-speach.button.fa 
+      div.surrender.button.fa
+      div.timer.button.fa please wait
+  
     .map
-
 
       - for (var j = 0; j < 10; ++j)
 
@@ -50,7 +40,6 @@ block content
               .hexagon.ribbon.city.content
             - else
               .hexagon
-              //- .hexagon(class = Math.random() > 0.3 ? "land army army-red" : "")
 
         - if (j != 9)
 
@@ -68,25 +57,6 @@ block content
                 .hexagon.land
               - else
                 .hexagon
-
-    //- .row
-    //-   - for (var i = 0; i < 10; ++i)
-    //-     .hexagon
-
-    //- .row
-    //-   - for (var i = 0; i < 11; ++i)
-    //-     .hexagon
-
-    //- .row
-    //-   .hexagon.content.ribbon(data-content='This is a test!!!')
-    //-   .hexagon.content.longtext(data-content='Some longer text here.')
-
-    //- .row
-    //-   .hexagon
-
-    //- .row
-    //-   .hexagon.content.ribbon(data-content='This is a test!!!')
-    //-   .hexagon.content.longtext(data-content='Some longer text here.')
 
   script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
   script(src='/underscore.js')

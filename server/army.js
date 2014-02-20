@@ -10,7 +10,7 @@ function Army(count,type){
 	this.morale = DEFAULT_MORALE;
 	this.type = type
 	this.moved = false;
-};
+}
 Army.prototype.landing = function () {
 	this.type = 'land';
 }
@@ -47,7 +47,7 @@ Army.prototype.join = function (otherArmy){
 	this.morale = Math.round(powerSum/this.count);
 	this.normalize();
 }
-Army.prototype.learnFromTravel = function(){
+Army.prototype.learnFromTravel = function (){
 	this.morale += MORALE_FOR_MOVING;
 	this.normalize()
 }

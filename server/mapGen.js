@@ -71,7 +71,6 @@ mapGen.prototype.addCities = function(borderXmin,borderXmax,borderYmin,borderYma
         safetyBreakCounter++;
         posX = Math.floor(Math.random()*(borderXmax-borderXmin))+borderXmin;
         posY = Math.floor(Math.random()*(borderYmax-borderYmin))+borderYmin;
-        // console.log('posx:'+posX+'posY'+posY);
         if(this._isInMap(posX,posY) && this.map[posX][posY].city == null && this.map[posX][posY].type == 'land' ){
             if(this.isHarbor(posX,posY)) this.map[posX][posY].city = 'harbor';
             else this.map[posX][posY].city = 'city';
