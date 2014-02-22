@@ -17,13 +17,13 @@ describe('Board',function (){
   });
   describe('.genPlayer',function (){
     it('should return; if PlAYER_LIMIT is exceeded',function (){
-      var protoSocket = {emit:function(){}};
+      var socket0 = {emit:function(){}};
     	board.players.push(new Player({emit:function(){}},'color'));
     	board.players.push(new Player({emit:function(){}},'color'));
     	// board.players.push(new Player({emit:function(){}},'color'));
     	// board.players.push(new Player({emit:function(){}},'color'));
 
-    	board.genPlayer(protoSocket);
+    	board.genPlayer(socket0);
 
     	board.players.should.have.lengthOf(2);//4
     });
@@ -45,16 +45,36 @@ describe('Board',function (){
       board.players.should.have.lengthOf(2);//4
     });
   });
-  // describe('.removePlayer',function (){
-  //   it('should remove player',function (){
-  //     var socket0 = {id:5,emit:function(){}};
-  //     var socket1 = {id:6,emit:function(){}};
+  describe('.removePlayer',function (){
+    it('should remove player',function (){
+      
+      var socket0 = {id:5,emit:function(){}};
+      var socket1 = {id:6,emit:function(){}};
 
-  //     board.genPlayer(socket0);
-  //     board.genPlayer(socket1);
-  //     var player = board.players[0];
-  //     board.removePlayer(player);
-  //     board.players.should.have.lengthOf(1);
-  //   });
-  // });
+      board.genPlayer(socket0);
+      board.genPlayer(socket1);
+      var player = board.players[0];
+      board.removePlayer(player);
+      board.players.should.have.lengthOf(1);
+    });
+  });
+  describe('.setCurrentPlayer',function (){
+    it("should set currentPlayer if there isn't one",function (){
+      var socket = {id:7,emit:function(){}};
+      var player = new Player(socket);
+
+      board.setCurrentPlayer(player);
+
+      board.currentPlayer.should.be.instanceOf(Player);
+      assert.deepEqual(board.currentPlayer,player);
+    });
+    it('should first unset currentPlayer, if there is one',function (){
+      var socket = {id:8,emit:function(){}};
+      var player = new Player(socket);
+      var notAPlayer = {setCurrent:function(){}};
+
+      board.setCurrentPlayer(notAPlayer);
+      assert.notDeepEqual(board.currentPlayer,player);
+    });
+  });
 });

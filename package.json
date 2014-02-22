@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "prestart": "coffee -c server/*.coffee",
     "start": "node app.js",
     "test": "./node_modules/.bin/mocha tests/all.js -R list"
   },

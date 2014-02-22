@@ -131,6 +131,7 @@ class Map
           destField.army.fight(sourceField.army)
 
     sourceField.army = null
+    sourceField.player = null if sourceField.type == 'water'
     # destField.army.learnFromTravel()
 
   removeArmies: (player) ->
