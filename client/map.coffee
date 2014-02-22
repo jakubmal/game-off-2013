@@ -3,16 +3,8 @@ class Map
     that = @
     @$element.on 'click', ".hexagon.army:not(.moved):not(.targetable)", (e) => @armyClicked e
     @$element.on 'click', '.hexagon.targetable', (e) => @targetClicked e
-    $(document).on 'click', '.end-turn', @onEndTurn
-    $(document).on 'click', '.give-speach', @onGiveSpeach
     $(document).keyup  (e) => @deselect e
-
-  onEndTurn: () ->
-    window.player.endTurn()
-
-  onGiveSpeach: () ->
-    window.player.giveSpeach()
-    
+  
   change: (fields) ->
     @fields = fields
 
@@ -124,7 +116,5 @@ class Map
     _.without(allNeighbours, _.findWhere(allNeighbours, point))
 
   isInMap: ({x, y}) -> @fields[x]?[y]?
-
-
 
 @Map = Map

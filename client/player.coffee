@@ -16,7 +16,9 @@ class Player
 
     @socket.emit 'join', {key}
 
-    @socket.on 'rejected', () -> window.location = '/games'
+    @socket.on 'rejected', () => 
+      alertify.alert "You've been rejected!"
+      setTimeout @returnToGameList, 3000
 
     @socket.on 'gameStarted', ({fields}) =>
       @onMapChange fields
@@ -31,20 +33,13 @@ class Player
       @isCurrent = false
       console.log 'not current'
 
-    @socket.on 'lost', () ->
-      alertify.set({labels:{
-        ok: 'Back to game list',
-        cancel: 'Stay and watch game'
-      }})
-      confirmed = alertify.confirm 'You lost'
-      console.log confirmed
-      # if confirmed 
-      #   console.log 'confirmed'
-      #   window.location.href = '/games'
+    @socket.on 'lost', () =>
+      alertify.alert 'You lost!'
+      setTimeout @returnToGameList, 2500
 
     @socket.on 'won', ()->
       alertify.alert 'Congratulations - You won!'
-      #window.location.href = '/games'
+      setTimeout @returnToGameList, 1500
 
   makeMove: (data) =>
     if @isCurrent == true
@@ -93,6 +88,8 @@ class Player
     clearInterval @clockTicking if @clockTicking != 0
     @clockTicking = 0
     timer.removeClass 'red'
-    timer.html "00:15"
+    timer.html "00:"+ TIME_PER_TURN_S
 
+  returnToGameList: () ->
+    window.location.href = '/games'
 @Player = Player

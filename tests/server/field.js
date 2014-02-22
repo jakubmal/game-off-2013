@@ -4,7 +4,7 @@ var should = require('should');
 var Field = require('../../server/field');
 
 describe('Field',function (){
-  describe('isCity',function (){
+  describe('.isCity',function (){
     it('Harbor and capital are also cities',function (){
       var harbor = new Field('harbor','land');
 	  var capital = new Field('capital','land');

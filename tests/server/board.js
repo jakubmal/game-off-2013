@@ -25,7 +25,7 @@ describe('Board',function (){
 
     	board.genPlayer(protoSocket);
 
-    	board.players.should.have.lengthOf(2);
+    	board.players.should.have.lengthOf(2);//4
     });
     it('should generate players',function (){
       var socket = {emit:function(){}};
@@ -42,7 +42,7 @@ describe('Board',function (){
         player.should.have.property('onDisconnect');
         player.should.have.property('onCountArmies');
       }); 
-      board.players.should.have.lengthOf(2);
+      board.players.should.have.lengthOf(2);//4
     });
   });
   // describe('.removePlayer',function (){
@@ -56,5 +56,5 @@ describe('Board',function (){
   //     board.removePlayer(player);
   //     board.players.should.have.lengthOf(1);
   //   });
-  });
+  // });
 });

@@ -16,7 +16,7 @@ class Player
     sockets[@id].on 'endTurn', () => @onEndTurn()
     sockets[@id].on 'disconnect', () => @onDisconnect()
     sockets[@id].on 'findArmies', () => @onCountArmies()
-    sockets[@id].on 'surrender', () => @onDisconnect()
+    sockets[@id].on 'surrender', () => @lost()
     sockets[@id].on 'giveSpeach', () => @onGiveSpeach()
 
   setCurrent: () ->
@@ -37,7 +37,6 @@ class Player
 
   won: () ->
     sockets[@id].emit 'won'
-    @onDisconnect()
 
   serialize: () ->
     _.omit @, 'socket'

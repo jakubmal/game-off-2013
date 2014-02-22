@@ -4,7 +4,7 @@ var should = require('should');
 var Army = require('../../server/army');
 
 describe('Army',function (){
-  describe('normalize',function (){
+  describe('.normalize',function (){
       it('ensures morale and count are below 99',function (){
         var army = new Army(10,'land');
 
@@ -24,7 +24,7 @@ describe('Army',function (){
     });
   });
   
-  describe('getPower',function(){
+  describe('.getPower',function(){
     it("calculates army's power",function (){
       var armies = [];
       var powers = [];
@@ -44,7 +44,7 @@ describe('Army',function (){
     });
   });
 
-  describe('fight',function (){
+  describe('.fight',function (){
     it("calculates army's count and morale after fighting enemy",function (){
       var army = [];
       var enemy = [];
@@ -74,7 +74,7 @@ describe('Army',function (){
     });
   });
 
-  describe('join',function (){
+  describe('.join',function (){
     it('joins two armies, that have the same owner',function () {
       var armies = [];
       var demoralizedArmy = new Army(10,'land');
@@ -106,7 +106,7 @@ describe('Army',function (){
 
     });
   });
-  describe('learnFromTravel',function (){
+  describe('.learnFromTravel',function (){
     it('It increases morale after moving', function (){
       var army = new Army(80,'land');
 

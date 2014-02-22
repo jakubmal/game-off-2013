@@ -31,10 +31,13 @@ class Board
     player.onCountArmies = () => @countArmies(player)
 
   removePlayer: (player) ->
+
     @players = _.without @players, player
-    @players[0].won() if @players.length == 1
-    @die() if @players.length == 0
     @map.removeArmies(player)
+
+    if @players.length == 1
+      @players[0].won() 
+      @die()
 
   startIfFull: () ->
     @start() if PLAYERS_LIMIT == @players.length
@@ -59,6 +62,7 @@ class Board
     @currentPlayer.setCurrent()
 
   goToNextPlayer: () ->
+    return if @players.length == 0
     @players.push(@players.shift())
     @setCurrentPlayer(@players[0])
     @turnCount++

@@ -10,5 +10,11 @@ socket.on 'welcome', () ->
   player.onMapChange = (fields) -> map.change fields
 
 $ ->
-  $('.fn-end-turn').click ->
+  $('.end-turn').click ->
     window.player.endTurn()
+  $('.surrender').click ->
+  	console.log 'Surrender'
+  	window.player.surrender()
+  $('.give-speach').click ->
+  	console.log 'Give speach'
+  	window.player.giveSpeach()
